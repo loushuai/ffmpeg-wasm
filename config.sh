@@ -1,0 +1,27 @@
+emconfigure ./configure \
+  --cc=emcc \
+  --cxx=em++ \
+  --ar=emar \
+  --ranlib=emranlib \
+  --enable-cross-compile \
+  --target-os=none \
+  --arch=wasm32 \
+  --disable-x86asm \
+  --disable-inline-asm \
+  --disable-programs \
+  --disable-doc \
+  --disable-debug \
+  --disable-network \
+  --disable-encoders \
+  --disable-muxers \
+  --disable-demuxers \
+  --disable-filters \
+  --disable-bsfs \
+  --disable-devices \
+  --disable-protocols \
+  --disable-hwaccels \
+  --enable-decoder=h264 \
+  --enable-decoder=aac \
+  --enable-parser=h264 \
+  --enable-parser=aac \
+  --enable-avformat

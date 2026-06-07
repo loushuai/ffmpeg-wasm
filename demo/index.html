@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>FFmpeg WASM Demo</title>
+  <style>
+    body { font-family: monospace; background: #1e1e1e; color: #d4d4d4; padding: 20px; }
+    h1 { color: #569cd6; }
+    #output { white-space: pre-wrap; background: #000; padding: 16px; border-radius: 4px; line-height: 1.5; }
+    .pass { color: #4ec9b0; }
+    .fail { color: #f44747; }
+    button { background: #569cd6; color: #fff; border: none; padding: 8px 16px; cursor: pointer; margin: 8px 4px 8px 0; border-radius: 4px; }
+    button:hover { background: #4a8abf; }
+  </style>
+</head>
+<body>
+  <h1>FFmpeg WebAssembly Demo</h1>
+  <div>
+    <button onclick="runAll()">Run All Tests</button>
+    <button onclick="runTest('get_version_info')">Version Info</button>
+    <button onclick="runTest('test_h264_decoder')">H.264 Decoder</button>
+    <button onclick="runTest('test_aac_decoder')">AAC Decoder</button>
+    <button onclick="runTest('test_packet_alloc')">Packet/Frame Alloc</button>
+  </div>
+  <div id="output">Loading WASM module...</div>
+
+  <script src="demo.js"></script>
+  <script>
+    const outputEl = document.getElementById('output');
+    let Module;
+
+    function log(text) {
+      let colored = text
+        .replace(/(PASS:.*)/g, '<span class="pass">$1</span>')
+        .replace(/(FAIL:.*)/g, '<span class="fail">$1</span>');
+      outputEl.innerHTML += colored + '\n';
+    }
+
+    FFmpegDemo({
+      print: log,
+      printErr: log
+    }).then(mod => {
+      Module = mod;
+      outputEl.innerHTML = 'Module loaded. Click a button to run tests.\n';
+    }).catch(err => {
+      outputEl.innerHTML = 'Failed to load module: ' + err.message;
+    });
+
+    function runTest(name) {
+      outputEl.innerHTML = '';
+      Module.ccall(name, 'number', [], []);
+    }
+
+    function runAll() {
+      outputEl.innerHTML = '';
+      Module.ccall('main', 'number', [], []);
+    }
+  </script>
+</body>
+</html>
