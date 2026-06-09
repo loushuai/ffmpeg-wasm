@@ -45,6 +45,7 @@ cd ..
 
 # Build and run the demo
 cd demo
+chmod +x ./build.sh
 ./build.sh
 
 # Run the demo using a simple HTTP server
